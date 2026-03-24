@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ruslan's Portfolio Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080d16;
+      --bg2: #0e1624;
+      --bg3: #141e30;
+      --teal: #3dd6a3;
+      --teal-dim: #1a6b52;
+      --amber: #f0b429;
+      --blue: #4a9eff;
+      --text: #e8edf5;
+      --text-dim: #6b809a;
+      --text-mid: #a0b3c8;
+      --border: rgba(61,214,163,0.15);
+      --border2: rgba(255,255,255,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* === CANVAS BG === */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    /* === NAV === */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: rgba(8,13,22,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--teal);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--teal); }
+
+    /* === SECTIONS === */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 7rem 2rem;
+    }
+
+    /* === HERO === */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 8rem;
+      max-width: 1000px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--teal);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    h1 em {
+      color: var(--teal);
+      font-style: italic;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-mid);
+      margin-top: 1.75rem;
+      max-width: 560px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .tag-teal { border: 1px solid var(--teal-dim); color: var(--teal); background: rgba(61,214,163,0.06); }
+    .tag-amber { border: 1px solid rgba(240,180,41,0.3); color: var(--amber); background: rgba(240,180,41,0.06); }
+    .tag-blue { border: 1px solid rgba(74,158,255,0.3); color: var(--blue); background: rgba(74,158,255,0.06); }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: var(--bg);
+      font-weight: 500;
+    }
+    .btn-primary:hover { background: #5dffc0; }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+    }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+    .btn-amber {
+      border: 1px solid rgba(240,180,41,0.3);
+      color: var(--amber);
+    }
+    .btn-amber:hover { border-color: var(--amber); color: var(--amber); background: rgba(240,180,41,0.08); }
+
+    .btn-blue {
+      border: 1px solid rgba(74,158,255,0.3);
+      color: var(--blue);
+    }
+    .btn-blue:hover { border-color: var(--blue); color: var(--blue); background: rgba(74,158,255,0.08); }
+
+    /* === SECTION HEADING === */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--teal);
+      margin: 1rem 0 3rem;
+      opacity: 0.6;
+    }
+
+    /* === ABOUT === */
+    #about p {
+      color: var(--text-mid);
+      margin-bottom: 1.25rem;
+      font-size: 1.05rem;
+    }
+
+    #about strong { color: var(--text); font-weight: 400; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin-top: 3rem;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .about-stat {
+      padding: 1.75rem;
+      background: var(--bg2);
+      border-right: 1px solid var(--border2);
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .about-stat:nth-child(even) { border-right: none; }
+    .about-stat:nth-last-child(-n+2) { border-bottom: none; }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* === SKILLS === */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .skill-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-3px);
+    }
+
+    .skill-icon {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .skill-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-card p {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+
+    .skill-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .skill-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 0.25rem 0.65rem;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      color: var(--text-mid);
+    }
+
+    /* === PROJECTS === */
+    .projects-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--teal-dim);
+      border-radius: 0 4px 4px 0;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      transition: border-left-color 0.2s;
+      text-decoration: none;
+    }
+
+    .project-card:hover { border-left-color: var(--teal); }
+
+    .project-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card p {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .project-arrow {
+      font-size: 1.2rem;
+      color: var(--teal-dim);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .project-card:hover .project-arrow { color: var(--teal); transform: translate(3px, -3px); }
+
+    /* === RESEARCH === */
+    .research-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem;
+    }
+
+    .research-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .research-box p {
+      color: var(--text-mid);
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .research-interests {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    /* === CONTACT === */
+    #contact {
+      text-align: center;
+      padding-bottom: 8rem;
+    }
+
+    #contact p {
+      color: var(--text-mid);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* === FOOTER === */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* === FORMULA FLOATS === */
+    .formula {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--teal);
+      opacity: 0.4;
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1.5rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .project-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Animated background canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">read. learn. prevail.</span>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">// Data Science &amp; Computational Materials</p>
+  <h1>Ruslan <em>Hasanov</em></h1>
+  <p class="hero-sub">
+    Materials &amp; Chemical Engineer turned Data Scientist. Passionate about leverage machine learning & AI
+    to push humanity forward.
+  </p>
+  <div class="hero-tags">
+    <span class="tag tag-teal">Python</span>
+    <span class="tag tag-teal">Machine & Deep Learning</span>
+    <span class="tag tag-teal">LLMs</span>
+    <span class="tag tag-amber">Perovskite Solar Cells</span>
+    <span class="tag tag-amber">Renewable Energy Systems</span>
+    <span class="tag tag-amber">Green Technologies</span>
+    <span class="tag tag-blue">PhD Aspirant</span>
+  </div>
+  <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="CVs/Industrial CV.pdf" class="btn btn-amber" target="_blank">Data Scientist CV</a>
+      <a href="CVs/Scientific CV.pdf" class="btn btn-amber" target="_blank">Research CV</a>
+      <a href="#contact" class="btn btn-blue">Get in Touch</a>
+  </div>
+
+  <!-- Floating formulas -->
+  <span class="formula" style="right:8%;top:30%">η = P_out / P_in</span>
+  <span class="formula" style="right:0%;top:45%">P(A|B) = P(B|A)P(A) / P(B)</span>
+  <span class="formula" style="right:4%;top:70%">J(θ) = ½m Σ(hθ(x)−y)²</span>
+</section>
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label reveal">// 01 — About</p>
+  <h2 class="reveal">Background &amp; Motivation</h2>
+  <div class="section-divider reveal"></div>
+
+  <div style="display: flex; gap: 3rem; align-items: flex-start; flex-wrap: wrap; margin-bottom: 2rem;">
+
+    <div style="flex-shrink: 0;">
+      <img
+        src="images/pfp.jpg"
+        alt="Your Name"
+        style="
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid rgba(61,214,163,0.4);
+          display: block;
+        "
+      />
+    </div>
+
+  <div style="flex: 1; min-width: 260px;">
+      <p class="reveal">
+        I have a background in <strong>chemical and materials engineering</strong>, with a focus on
+        thin-film semiconductor systems and photovoltaic device physics. Over time, I became fascinated
+        by how data-driven approaches can compress the materials discovery timeline from decades to years.
+      </p>
+      <p class="reveal">
+        Today I sit at the intersection of <strong>Python-based ML/AI pipelines</strong> and
+        <strong>electrochemical materials science</strong> — building models that predict crystal stability,
+        band gaps, and charge transport properties before a single experiment is run.
+      </p>
+      <p class="reveal">
+        My long-term goal is a <strong>PhD focused on computational approaches to solar cell optimization</strong>,
+        combining density functional theory, high-throughput screening, and neural network potentials.
+      </p>
+    </div>
+
+  </div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">// 02 — Skills</p>
+  <h2 class="reveal">What I Work With</h2>
+  <div class="section-divider reveal"></div>
+
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <span class="skill-icon">[ MATERIALS ]</span>
+      <h3>Materials Science</h3>
+      <p>Device physics, thin-film characterization, crystal structure analysis, band gap engineering.</p>
+      <div class="skill-list">
+        <span class="skill-pill">XRD</span>
+        <span class="skill-pill">SEM/TEM</span>
+        <span class="skill-pill">UV-Vis</span>
+        <span class="skill-pill">Electrochemistry</span>
+        <span class="skill-pill">Perovskites</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <span class="skill-icon">[ CODE ]</span>
+      <h3>Programming & Data</h3>
+      <p>Python-first workflow. From data wrangling to model deployment and scientific computing.</p>
+      <div class="skill-list">
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">NumPy</span>
+        <span class="skill-pill">Pandas</span>
+        <span class="skill-pill">Matplotlib</span>
+        <span class="skill-pill">SQL</span>
+        <span class="skill-pill">Git</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <span class="skill-icon">[ ML/AI ]</span>
+      <h3>Machine Learning</h3>
+      <p>Supervised &amp; unsupervised learning, neural networks, and materials property prediction.</p>
+      <div class="skill-list">
+        <span class="skill-pill">Scikit-learn</span>
+        <span class="skill-pill">PyTorch</span>
+        <span class="skill-pill">Graph NN</span>
+        <span class="skill-pill">Feature Eng.</span>
+        <span class="skill-pill">SHAP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label reveal">// 03 — Projects</p>
+  <h2 class="reveal">Selected Work</h2>
+  <div class="section-divider reveal"></div>
+
+  <div class="projects-list">
+
+    <a class="project-card reveal" href="#" target="_blank">
+      <div>
+        <h3>Band Gap Predictor for Perovskite Alloys</h3>
+        <p>Machine learning model trained on the Materials Project database to predict optical band gaps of ABX₃ perovskites. Achieved MAE of 0.18 eV using gradient-boosted trees with compositional fingerprints.</p>
+        <div class="project-tags">
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-teal">XGBoost</span>
+          <span class="tag tag-amber">Materials Project API</span>
+          <span class="tag tag-amber">Perovskites</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+    <a class="project-card reveal" href="#" target="_blank">
+      <div>
+        <h3>Solar Cell Efficiency Data Analysis</h3>
+        <p>Exploratory analysis of 10,000+ published solar cell efficiency records. Identified compositional trends linking halide ratios to open-circuit voltage. Visualized using interactive Plotly dashboards.</p>
+        <div class="project-tags">
+          <span class="tag tag-teal">Pandas</span>
+          <span class="tag tag-teal">Plotly</span>
+          <span class="tag tag-blue">Data Science</span>
+          <span class="tag tag-amber">Photovoltaics</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+    <a class="project-card reveal" href="#" target="_blank">
+      <div>
+        <h3>Crystal Stability Classifier</h3>
+        <p>Binary classification model to predict thermodynamic stability of hypothetical compounds using elemental descriptors and formation energy data from DFT calculations.</p>
+        <div class="project-tags">
+          <span class="tag tag-teal">Scikit-learn</span>
+          <span class="tag tag-teal">Python</span>
+          <span class="tag tag-amber">DFT</span>
+          <span class="tag tag-blue">ML</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <p class="section-label reveal">// 04 — Research Vision</p>
+  <h2 class="reveal">PhD Research<br/>Interests</h2>
+  <div class="section-divider reveal"></div>
+
+  <div class="research-box reveal">
+    <h3>Computational Discovery of Photovoltaic Materials</h3>
+    <p>
+      My research vision centres on replacing empirical trial-and-error in solar cell development with
+      <strong style="color:var(--text)">machine learning-accelerated high-throughput screening</strong>.
+      Specifically, I am interested in training graph neural networks on DFT-calculated datasets to
+      predict defect tolerance, charge carrier mobility, and stability under illumination — the three
+      critical bottlenecks in perovskite commercialisation.
+    </p>
+    <p>
+      I am actively looking for PhD opportunities at the intersection of
+      <strong style="color:var(--text)">computational materials science</strong> and
+      <strong style="color:var(--text)">data-driven chemistry</strong>. If you are working in this space,
+      I would be glad to connect.
+    </p>
+    <div class="research-interests">
+      <span class="tag tag-amber">Perovskite Solar Cells</span>
+      <span class="tag tag-amber">High-Throughput Screening</span>
+      <span class="tag tag-teal">Graph Neural Networks</span>
+      <span class="tag tag-teal">Materials Informatics</span>
+      <span class="tag tag-blue">DFT</span>
+      <span class="tag tag-blue">Defect Physics</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label reveal" style="text-align:center">// 05 — Contact</p>
+  <h2 class="reveal">Get In Touch</h2>
+  <div class="section-divider reveal" style="margin-left:auto;margin-right:auto"></div>
+  <p class="reveal">
+    Whether you're a recruiter, professor, or just someone who shares my passion for sustainable energy and data science —
+    I'm always open to a conversation.
+  </p>
+  <div class="contact-links reveal">
+    <button onclick="navigator.clipboard.writeText('ruslanhesenov510@gmail.com').then(() => { this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Email', 1500); })" class="btn btn-primary">Email</button>
+    <a href="https://linkedin.com/in/r4s1an" class="btn btn-primary" target="_blank">LinkedIn</a>
+    <a href="https://github.com/r4s1an" class="btn btn-primary" target="_blank">GitHub</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Ruslan Hasanov — Built with purpose to improve and prosper</span>
+</footer>
+
+<script>
+  /* === ANIMATED HEX GRID BACKGROUND === */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, hexes = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    buildHexes();
+  }
+
+  function buildHexes() {
+    hexes = [];
+    const size = 38, colW = size * Math.sqrt(3), rowH = size * 1.5;
+    for (let row = -1; row < H / rowH + 2; row++) {
+      for (let col = -1; col < W / colW + 2; col++) {
+        const x = col * colW + (row % 2) * colW / 2;
+        const y = row * rowH;
+        hexes.push({ x, y, size, alpha: Math.random() * 0.08, target: Math.random() * 0.12, speed: 0.003 + Math.random() * 0.005 });
+      }
+    }
+  }
+
+  function hexPath(x, y, s) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = Math.PI / 180 * (60 * i - 30);
+      i === 0 ? ctx.moveTo(x + s * Math.cos(a), y + s * Math.sin(a))
+              : ctx.lineTo(x + s * Math.cos(a), y + s * Math.sin(a));
+    }
+    ctx.closePath();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    hexes.forEach(h => {
+      h.alpha += (h.target - h.alpha) * h.speed;
+      if (Math.abs(h.target - h.alpha) < 0.001) {
+        h.target = Math.random() * 0.14;
+        h.speed = 0.002 + Math.random() * 0.006;
+      }
+      hexPath(h.x, h.y, h.size);
+      ctx.strokeStyle = `rgba(61,214,163,${h.alpha})`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+
+  /* === SCROLL REVEAL === */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

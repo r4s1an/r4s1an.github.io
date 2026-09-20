@@ -32,9 +32,22 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <span class="nav-sep"></span>
-    <button class="nav-toggle" aria-label="Toggle theme" onclick="document.body.classList.toggle('light-mode')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <button class="nav-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <!-- moon: visible in dark mode -->
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <!-- sun: visible in light mode -->
+      <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </button>
   </div>
@@ -86,22 +99,22 @@
         <a href="https://sites.utu.fi/smat/" target="_blank">S-MAT</a>.</p>
       <p>I got my first industrial AI experience at
         <a href="https://arazmarket.az/en" target="_blank">Araz Supermarket MMC</a>,
-        building AI-powered applications. I currently work at
-        <a href="https://www.epam.com/" target="_blank">EPAM</a> as an
-        <strong>AI Software Engineer</strong>.</p>
+        building AI-powered applications. I have completed five months of the
+        <a href="https://www.epam.com/" target="_blank">EPAM</a>
+        <strong>Career Excellence Program</strong>, focused on AI Engineering.</p>
       <div class="bio-tags">
         <span class="tag tag-blue">Python</span>
         <span class="tag tag-blue">Machine Learning</span>
         <span class="tag tag-blue">LLMs</span>
-        <span class="tag tag-amber">Solar Cells</span>
-        <span class="tag tag-amber">Renewable Energy</span>
+        <span class="tag tag-green">Solar Cells</span>
+        <span class="tag tag-green">Renewable Energy</span>
         <span class="tag tag-blue">Version Control</span>
       </div>
     </div>
 
     <!-- Stat 1 -->
     <a class="bento-card bento-stat-1 reveal" href="https://www.utupub.fi/items/7a805220-af28-442f-a1cb-84d3d36b4176" target="_blank" rel="noopener noreferrer">
-      <span class="stat-num">950+</span>
+      <span class="stat-num">1600+</span>
       <span class="stat-label">Thesis Downloads</span>
       <span class="stat-link">Read the thesis ↗</span>
     </a>
@@ -130,6 +143,11 @@
         <span class="skill-pill">OOP</span>
         <span class="skill-pill">Matplotlib</span>
         <span class="skill-pill">Streamlit</span>
+        <span class="skill-pill">Docker</span>
+        <span class="skill-pill">AWS Lambda</span>
+        <span class="skill-pill">MongoDB</span>
+        <span class="skill-pill">RabbitMQ</span>
+        <span class="skill-pill">Kubernetes</span>
       </div>
     </div>
 
@@ -157,7 +175,7 @@
       <div class="timeline-num">01</div>
       <div class="timeline-line"></div>
       <div class="timeline-card">
-        <time class="timeline-date">Apr 2026 — Present</time>
+        <time class="timeline-date">Apr 2026 — Sep 2026</time>
         <h3>Junior AI Software Engineer</h3>
         <p class="timeline-company">EPAM Systems &nbsp;·&nbsp; Remote</p>
         <ul class="timeline-bullets">
@@ -211,8 +229,8 @@
           <span class="tag tag-blue">Python</span>
           <span class="tag tag-blue">OOP</span>
           <span class="tag tag-blue">Matplotlib</span>
-          <span class="tag tag-amber">Solar Cells</span>
-          <span class="tag tag-amber">Photovoltaics</span>
+          <span class="tag tag-green">Solar Cells</span>
+          <span class="tag tag-green">Photovoltaics</span>
         </div>
       </div>
     </div>
@@ -233,7 +251,7 @@
           <span class="tag tag-blue">LSTM</span>
           <span class="tag tag-blue">SARIMAX</span>
           <span class="tag tag-blue">Python</span>
-          <span class="tag tag-amber">Energy Forecasting</span>
+          <span class="tag tag-green">Energy Forecasting</span>
         </div>
       </div>
     </div>
@@ -264,6 +282,23 @@
           <span class="tag tag-blue">SciPy</span>
           <span class="tag tag-amber">Perovskite Solar Cells</span>
           <span class="tag tag-amber">Photovoltaics</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+    <a class="project-card reveal" href="https://github.com/r4s1an/hybrid-rag-paper-qa" target="_blank">
+      <div>
+        <h3>Hybrid RAG — Research Paper Q&amp;A</h3>
+        <p>A production-style Retrieval-Augmented Generation pipeline built from scratch — no high-level RAG frameworks — for answering natural language questions about an academic paper. Combines BM25 sparse retrieval and BGE dense vector search, fused via Reciprocal Rank Fusion, then re-ranked by a cross-encoder. Achieved 1.0 faithfulness (zero hallucination) across all evaluation questions. Served through a Streamlit chat UI with full source attribution.</p>
+        <div class="project-tags">
+          <span class="tag tag-blue">Python</span>
+          <span class="tag tag-blue">LangChain</span>
+          <span class="tag tag-blue">ChromaDB</span>
+          <span class="tag tag-blue">Sentence Transformers</span>
+          <span class="tag tag-blue">BM25</span>
+          <span class="tag tag-blue">Streamlit</span>
+          <span class="tag tag-blue">Groq API</span>
         </div>
       </div>
       <span class="project-arrow">↗</span>

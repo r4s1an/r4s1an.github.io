@@ -1,3 +1,15 @@
+/* === THEME TOGGLE === */
+(function () {
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.body.classList.add('light-mode');
+
+  btn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+})();
+
 /* === ANIMATED HEX GRID BACKGROUND === */
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
@@ -46,7 +58,10 @@ function draw() {
       h.speed  = 0.002 + Math.random() * 0.006;
     }
     hexPath(h.x, h.y, h.size);
-    ctx.strokeStyle = `rgba(0,180,255,${h.alpha})`;
+    const isLight = document.body.classList.contains('light-mode');
+    ctx.strokeStyle = isLight
+      ? `rgba(109,40,217,${h.alpha})`
+      : `rgba(0,180,255,${h.alpha})`;
     ctx.lineWidth   = 0.6;
     ctx.stroke();
   });
